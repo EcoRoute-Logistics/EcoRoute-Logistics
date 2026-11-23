@@ -1,0 +1,35 @@
+name: Test conexión AWS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["test/aws-conexion"]
+
+jobs:
+  probar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: 1 Quién soy en AWS
+        run: aws sts get-caller-identity
+
+      - name: 2 Repositorio ECR
+        continue-on-error: true
+        run: aws ecr describe-repositories --repository-names api
+
+      - name: 3 Instancia EC2 en línea (SSM)
+        continue-on-error: true
+        run: |
+          aws ssm describe-instance-information \
+            --query "InstanceInformationList[].[InstanceId,PingStatus]" \
+            --output text
+
+      - name: 4 Buckets S3
+        continue-on-error: true
+        run: aws s3 ls
