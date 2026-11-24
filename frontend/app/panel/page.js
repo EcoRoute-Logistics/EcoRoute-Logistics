@@ -10,6 +10,14 @@ const estados = {
   incidencia: { texto: "Incidencia", color: "bg-red-100 text-red-800" },
 };
 
+function Estado({ valor }) {
+  return (
+    <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-medium ${estados[valor].color}`}>
+      {estados[valor].texto}
+    </span>
+  );
+}
+
 export default function PanelPage() {
   const [filtro, setFiltro] = useState("todos");
 
@@ -34,7 +42,7 @@ export default function PanelPage() {
         </span>
       </div>
 
-      <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-5">
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-5">
         {tarjetas.map((t) => (
           <div key={t.label} className="rounded-xl border border-gray-200 bg-white p-4">
             <p className="text-sm text-gray-500">{t.label}</p>
@@ -57,7 +65,24 @@ export default function PanelPage() {
         ))}
       </div>
 
-      <div className="mt-4 overflow-x-auto rounded-xl border border-gray-200 bg-white">
+      <div className="mt-4 space-y-3 md:hidden">
+        {visibles.map((e) => (
+          <div key={e.id} className="rounded-xl border border-gray-200 bg-white p-4">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <p className="font-semibold">{e.cliente}</p>
+                <p className="text-sm text-gray-500">{e.direccion}</p>
+              </div>
+              <Estado valor={e.estado} />
+            </div>
+            <p className="mt-2 text-sm text-gray-600">
+              {e.hora} · {e.conductor} · {e.vehiculo}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-4 hidden overflow-x-auto rounded-xl border border-gray-200 bg-white md:block">
         <table className="w-full text-left text-sm">
           <thead className="border-b border-gray-200 bg-gray-50 text-gray-500">
             <tr>
@@ -78,9 +103,7 @@ export default function PanelPage() {
                 <td className="px-4 py-3">{e.conductor}</td>
                 <td className="px-4 py-3">{e.vehiculo}</td>
                 <td className="px-4 py-3">
-                  <span className={`rounded-full px-3 py-1 text-xs font-medium ${estados[e.estado].color}`}>
-                    {estados[e.estado].texto}
-                  </span>
+                  <Estado valor={e.estado} />
                 </td>
               </tr>
             ))}
