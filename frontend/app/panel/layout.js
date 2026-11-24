@@ -1,5 +1,13 @@
 import RutaProtegida from "@/components/RutaProtegida";
+import EncabezadoPanel from "@/components/EncabezadoPanel";
 
 export default function PanelLayout({ children }) {
-  return <RutaProtegida rol="admin">{children}</RutaProtegida>;
+  return (
+    <RutaProtegida rol="admin">
+      <div className="min-h-screen bg-gray-50 text-gray-900">
+        <EncabezadoPanel />
+        <main className="mx-auto max-w-6xl px-6 py-8">{children}</main>
+      </div>
+    </RutaProtegida>
+  );
 }
