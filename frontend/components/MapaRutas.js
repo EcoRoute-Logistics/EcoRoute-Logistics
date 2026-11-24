@@ -51,7 +51,7 @@ export default function MapaRutas({ bodega, rutas, trazados, seleccionada }) {
       center={[bodega.lat, bodega.lng]}
       zoom={13}
       scrollWheelZoom
-      className="h-[500px] w-full rounded-xl"
+      className="h-[350px] w-full rounded-xl sm:h-[500px]"
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'

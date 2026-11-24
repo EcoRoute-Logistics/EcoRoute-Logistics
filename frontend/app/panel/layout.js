@@ -6,7 +6,7 @@ export default function PanelLayout({ children }) {
     <RutaProtegida rol="admin">
       <div className="min-h-screen bg-gray-50 text-gray-900">
         <EncabezadoPanel />
-        <main className="mx-auto max-w-6xl px-6 py-8">{children}</main>
+        <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">{children}</main>
       </div>
     </RutaProtegida>
   );

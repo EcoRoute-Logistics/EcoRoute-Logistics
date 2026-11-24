@@ -7,7 +7,7 @@ import { bodega, rutasEjemplo } from "@/lib/rutasEjemplo";
 const MapaRutas = dynamic(() => import("@/components/MapaRutas"), {
   ssr: false,
   loading: () => (
-    <div className="flex h-[500px] items-center justify-center rounded-xl bg-white text-gray-500">
+    <div className="flex h-[350px] items-center justify-center rounded-xl bg-white text-gray-500 sm:h-[500px]">
       Cargando mapa...
     </div>
   ),
@@ -92,7 +92,7 @@ export default function RutasPage() {
           ))}
         </div>
 
-        <div className="lg:col-span-2">
+        <div className="order-first lg:order-none lg:col-span-2">
           <MapaRutas bodega={bodega} rutas={rutasEjemplo} trazados={trazados} seleccionada={seleccionada} />
         </div>
       </div>
