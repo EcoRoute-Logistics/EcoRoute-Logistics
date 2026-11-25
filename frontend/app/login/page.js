@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { usuariosDemo } from "@/lib/usuarios";
 
 const estiloInput =
   "mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-green-600 focus:outline-none dark:border-gray-700 dark:bg-gray-800";
@@ -14,33 +13,24 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [cargando, setCargando] = useState(false);
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
     setError("");
-    setCargando(true);
 
-    try {
-      const res = await fetch(`${API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+    const usuario = usuariosDemo.find(
+      (u) => u.email === email.trim().toLowerCase() && u.password === password
+    );
 
-      if (!res.ok) {
-        throw new Error("Correo o contraseña incorrectos");
-      }
-
-      const data = await res.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("usuario", JSON.stringify(data.usuario));
-      router.push(data.usuario.rol === "conductor" ? "/conductor" : "/panel");
-    } catch (err) {
-      setError(err.message === "Failed to fetch" ? "No se pudo conectar con el servidor" : err.message);
-    } finally {
-      setCargando(false);
+    if (!usuario) {
+      setError("Correo o contraseña incorrectos");
+      return;
     }
+
+    const datos = { id: usuario.id, nombre: usuario.nombre, rol: usuario.rol };
+    localStorage.setItem("token", `demo-${usuario.id}-${Date.now()}`);
+    localStorage.setItem("usuario", JSON.stringify(datos));
+    router.push(usuario.rol === "conductor" ? "/conductor" : "/panel");
   }
 
   return (
@@ -85,10 +75,9 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            disabled={cargando}
-            className="w-full rounded-lg bg-green-600 py-2 font-semibold text-white hover:bg-green-700 disabled:opacity-60"
+            className="w-full rounded-lg bg-green-600 py-2 font-semibold text-white hover:bg-green-700"
           >
-            {cargando ? "Ingresando..." : "Ingresar"}
+            Ingresar
           </button>
         </form>
       </div>
