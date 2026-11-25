@@ -24,6 +24,19 @@ Configura las variables necesarias antes de iniciar el backend y el frontend (us
    git clone https://github.com/EcoRoute-Logistics/EcoRoute-Logistics.git
    cd EcoRoute-Logistics
    ```
+   2. **Backend:**
+   ```bash
+   cd backend
+   cp .env.example .env     # completa los valores
+   npm install
+   npm run dev              # http://localhost:3000
+   ```
+3. **Frontend:**
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
 
 ### Entorno local en ejecución
 - **Frontend (Next.js):**
