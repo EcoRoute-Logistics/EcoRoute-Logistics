@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { obtenerSesion, cerrarSesion } from "@/lib/auth";
 import { rutasEjemplo } from "@/lib/rutasEjemplo";
 import { entregasEjemplo } from "@/lib/datosEjemplo";
-import { estados, etiquetaEjemplo } from "@/lib/estados";
+import { estados } from "@/lib/estados";
 
 const botonSecundario =
   "block rounded-lg border border-gray-300 py-2 text-center text-sm font-semibold hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800";
@@ -91,10 +91,7 @@ export default function ConductorPage() {
       </header>
 
       <main className="mx-auto max-w-md space-y-3 px-5 py-6">
-        <div className="flex items-center justify-between">
-          <h2 className="font-semibold">Paradas en orden</h2>
-          <span className={etiquetaEjemplo}>Datos de ejemplo</span>
-        </div>
+        <h2 className="font-semibold">Paradas en orden</h2>
 
         {ruta.paradas.map((parada, i) => {
           const estado = estadoParadas[parada.nombre];

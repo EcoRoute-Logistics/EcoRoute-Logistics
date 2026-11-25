@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { bodega, rutasEjemplo } from "@/lib/rutasEjemplo";
-import { etiquetaEjemplo } from "@/lib/estados";
 
 const MapaRutas = dynamic(() => import("@/components/MapaRutas"), {
   ssr: false,
@@ -55,10 +54,7 @@ export default function RutasPage() {
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold">Rutas de hoy</h1>
-        <span className={etiquetaEjemplo}>Datos de ejemplo</span>
-      </div>
+      <h1 className="text-2xl font-bold">Rutas de hoy</h1>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
         <div className="space-y-3">

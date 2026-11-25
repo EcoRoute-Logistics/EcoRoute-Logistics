@@ -16,6 +16,3 @@ export const estados = {
     color: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
   },
 };
-
-export const etiquetaEjemplo =
-  "rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300";

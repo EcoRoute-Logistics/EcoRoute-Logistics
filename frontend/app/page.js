@@ -67,7 +67,7 @@ export default function Home() {
           </div>
 
           <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-800 dark:bg-gray-900">
-            <p className="text-sm text-gray-500 dark:text-gray-400">Resumen de hoy (ejemplo)</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Resumen de hoy</p>
             <div className="mt-4 grid grid-cols-2 gap-4">
               {resumen.map((item) => (
                 <div key={item.label} className="rounded-xl bg-gray-50 p-4 dark:bg-gray-800">

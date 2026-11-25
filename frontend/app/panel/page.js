@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { entregasEjemplo } from "@/lib/datosEjemplo";
-import { estados, etiquetaEjemplo } from "@/lib/estados";
+import { estados } from "@/lib/estados";
 
 const tarjeta = "rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900";
 
@@ -31,10 +31,7 @@ export default function PanelPage() {
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold">Entregas de hoy</h1>
-        <span className={etiquetaEjemplo}>Datos de ejemplo</span>
-      </div>
+      <h1 className="text-2xl font-bold">Entregas de hoy</h1>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-5">
         {tarjetas.map((t) => (
