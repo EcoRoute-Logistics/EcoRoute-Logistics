@@ -23,3 +23,33 @@ Configura las variables necesarias antes de iniciar el backend y el frontend (us
    ```bash
    git clone [https://github.com/EcoRoute-Logistics/EcoRoute-Logistics.git](https://github.com/EcoRoute-Logistics/EcoRoute-Logistics.git)
    cd EcoRoute-Logistics
+
+### Entorno local en ejecución
+- **Frontend (Next.js):**
+  ![Frontend corriendo en local](docs/capturas/frontend-dev.png)
+- **Backend (API Express):**
+  ![Backend escuchando en puerto 3000](docs/capturas/backend-dev.png)
+
+## Estructura del proyecto
+```text
+EcoRoute-Logistics/
+├── backend/
+│   └── src/
+│       ├── controllers/   # Controladores HTTP de la API
+│       ├── services/      # Lógica de negocio, cálculo/persistencia de rutas y CO₂
+│       ├── routes/        # Rutas y endpoints del servidor Express
+│       └── server.js      # Punto de entrada del backend
+├── frontend/              # Aplicación web en Next.js (panel de admin y portal del conductor)
+├── docs/
+│   ├── aws.md             # Documentación de infraestructura y despliegue en AWS
+│   └── capturas/          # Capturas de referencia del entorno local
+└── README.md
+
+
+## Flujo del sistema
+```text
+[Datos y pedidos] ---> [Backend (API / Lógica / PostGIS)] ---> [Frontend (Next.js)]
+                             |
+                             +---> Persistencia de rutas, paradas y estados
+                             +---> Estimación de ahorro de CO₂
+
