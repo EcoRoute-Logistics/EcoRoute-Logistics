@@ -156,7 +156,7 @@ La aplicación está publicada en **http://www.ecorouter.me**. El dominio se obt
 | CNAME | `api` | Application Load Balancer de la API |
 | Redirección | `@` | `http://www.ecorouter.me` |
 
-El bucket del frontend se llama igual que el subdominio (`www.ecorouter.me`) porque el sitio web estático de S3 solo responde a un dominio propio si coincide con el nombre del bucket. El sitio se sirve por HTTP, porque el alojamiento estático de S3 no ofrece HTTPS.
+El bucket del frontend se llama igual que el subdominio (`www.ecorouter.me`) porque el sitio web estático de S3 solo responde a un dominio propio si coincide con el nombre del bucket. El sitio se sirve por HTTP, porque el alojamiento estático de S3 no ofrece HTTPS
 
 Mientras se propagan los cambios de DNS, el sitio también responde en la dirección directa del bucket: http://www.ecorouter.me.s3-website-us-east-1.amazonaws.com
 
