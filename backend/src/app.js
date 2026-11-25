@@ -6,11 +6,13 @@ import authRouter from "./routes/auth.js";
 import vehiculosRouter from "./routes/vehiculos.js";
 import conductoresRouter from "./routes/conductores.js";
 import pedidosRoutes from "./routes/pedidos.routes.js";
+import rutasRoutes from "./routes/rutas.routes.js";
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use("/api/vehiculos", vehiculosRouter);
+app.use("/api", rutasRoutes);
 app.use("/api/conductores", conductoresRouter);
 app.use("/api", pedidosRoutes);
 
