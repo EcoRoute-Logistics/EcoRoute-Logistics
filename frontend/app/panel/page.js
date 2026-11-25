@@ -2,13 +2,9 @@
 
 import { useState } from "react";
 import { entregasEjemplo } from "@/lib/datosEjemplo";
+import { estados } from "@/lib/estados";
 
-const estados = {
-  pendiente: { texto: "Pendiente", color: "bg-gray-100 text-gray-700" },
-  en_camino: { texto: "En camino", color: "bg-yellow-100 text-yellow-800" },
-  entregado: { texto: "Entregado", color: "bg-green-100 text-green-800" },
-  incidencia: { texto: "Incidencia", color: "bg-red-100 text-red-800" },
-};
+const tarjeta = "rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900";
 
 function Estado({ valor }) {
   return (
@@ -35,17 +31,12 @@ export default function PanelPage() {
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold">Entregas de hoy</h1>
-        <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800">
-          Datos de ejemplo
-        </span>
-      </div>
+      <h1 className="text-2xl font-bold">Entregas de hoy</h1>
 
       <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-5">
         {tarjetas.map((t) => (
-          <div key={t.label} className="rounded-xl border border-gray-200 bg-white p-4">
-            <p className="text-sm text-gray-500">{t.label}</p>
+          <div key={t.label} className={tarjeta}>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{t.label}</p>
             <p className="mt-1 text-2xl font-bold">{t.valor}</p>
           </div>
         ))}
@@ -57,7 +48,9 @@ export default function PanelPage() {
             key={clave}
             onClick={() => setFiltro(clave)}
             className={`rounded-full px-4 py-1.5 text-sm ${
-              filtro === clave ? "bg-green-600 text-white" : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+              filtro === clave
+                ? "bg-green-600 text-white"
+                : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
             }`}
           >
             {clave === "todos" ? "Todos" : estados[clave].texto}
@@ -67,24 +60,24 @@ export default function PanelPage() {
 
       <div className="mt-4 space-y-3 md:hidden">
         {visibles.map((e) => (
-          <div key={e.id} className="rounded-xl border border-gray-200 bg-white p-4">
+          <div key={e.id} className={tarjeta}>
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className="font-semibold">{e.cliente}</p>
-                <p className="text-sm text-gray-500">{e.direccion}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{e.direccion}</p>
               </div>
               <Estado valor={e.estado} />
             </div>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
               {e.hora} · {e.conductor} · {e.vehiculo}
             </p>
           </div>
         ))}
       </div>
 
-      <div className="mt-4 hidden overflow-x-auto rounded-xl border border-gray-200 bg-white md:block">
+      <div className="mt-4 hidden overflow-x-auto rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 md:block">
         <table className="w-full text-left text-sm">
-          <thead className="border-b border-gray-200 bg-gray-50 text-gray-500">
+          <thead className="border-b border-gray-200 bg-gray-50 text-gray-500 dark:border-gray-800 dark:bg-gray-800/50 dark:text-gray-400">
             <tr>
               <th className="px-4 py-3 font-medium">Hora</th>
               <th className="px-4 py-3 font-medium">Cliente</th>
@@ -94,12 +87,12 @@ export default function PanelPage() {
               <th className="px-4 py-3 font-medium">Estado</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
             {visibles.map((e) => (
               <tr key={e.id}>
                 <td className="px-4 py-3">{e.hora}</td>
                 <td className="px-4 py-3 font-medium">{e.cliente}</td>
-                <td className="px-4 py-3 text-gray-600">{e.direccion}</td>
+                <td className="px-4 py-3 text-gray-600 dark:text-gray-400">{e.direccion}</td>
                 <td className="px-4 py-3">{e.conductor}</td>
                 <td className="px-4 py-3">{e.vehiculo}</td>
                 <td className="px-4 py-3">
