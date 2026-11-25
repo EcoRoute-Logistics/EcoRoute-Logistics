@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import pool from "./db.js";
 import healthRouter from "./routes/health.js";
 import archivosRouter from "./routes/archivos.js";
 import authRouter from "./routes/auth.js";
@@ -7,7 +8,10 @@ import vehiculosRouter from "./routes/vehiculos.js";
 import conductoresRouter from "./routes/conductores.js";
 import pedidosRoutes from "./routes/pedidos.routes.js";
 import rutasRoutes from "./routes/rutas.routes.js";
+
 const app = express();
+
+app.set("dbPool", pool);
 
 app.use(cors());
 app.use(express.json());
