@@ -9,20 +9,26 @@ Autenticación: header `Authorization: Bearer <token>` (excepto login).
 | POST | `/auth/login` | `{ email, password }` | `200 { token, usuario: { id, nombre, rol } }` |
 
 ## Vehículos
-| Método | Ruta | Respuesta |
+Todas las rutas requieren token. Crear, editar y borrar requieren rol `admin`.
+
+| Método | Ruta | Descripción |
 |---|---|---|
-| GET | `/vehiculos` | `200 [ { id, patente, capacidad_kg, tipo_combustible } ]` |
-| POST | `/vehiculos` | `201 { id, ... }` |
-| PUT | `/vehiculos/:id` | `200 { id, ... }` |
-| DELETE | `/vehiculos/:id` | `204` |
+| GET | `/vehiculos` | `200 [ { id, placa, tipo, capacidad_kg, emision_kg_por_km } ]` |
+| GET | `/vehiculos/:id` | `200 { ... }` o `404` |
+| POST | `/vehiculos` | Body: `{ placa, tipo, capacidad_kg, emision_kg_por_km? }`. `201`, `409` si la placa existe |
+| PUT | `/vehiculos/:id` | Actualiza los campos enviados. `200` |
+| DELETE | `/vehiculos/:id` | Borrado lógico. `204` |
 
 ## Conductores
-| Método | Ruta | Respuesta |
+Mismas reglas de acceso.
+
+| Método | Ruta | Descripción |
 |---|---|---|
-| GET | `/conductores` | `200 [ { id, nombre, licencia } ]` |
-| POST | `/conductores` | `201 { id, ... }` |
-| PUT | `/conductores/:id` | `200 { id, ... }` |
-| DELETE | `/conductores/:id` | `204` |
+| GET | `/conductores` | `200 [ { id, nombre, documento, telefono, vehiculo_id, vehiculo_placa, foto_url } ]` |
+| GET | `/conductores/:id` | `200 { ... }` o `404` |
+| POST | `/conductores` | Body: `{ nombre, documento, telefono?, vehiculo_id? }`. `201`, `409` si el documento existe |
+| PUT | `/conductores/:id` | Actualiza los campos enviados. `200` |
+| DELETE | `/conductores/:id` | Borrado lógico. `204` |
 
 ## Pedidos
 | Método | Ruta | Descripción |
