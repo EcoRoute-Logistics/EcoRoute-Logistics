@@ -5,13 +5,10 @@ import { useRouter } from "next/navigation";
 import { obtenerSesion, cerrarSesion } from "@/lib/auth";
 import { rutasEjemplo } from "@/lib/rutasEjemplo";
 import { entregasEjemplo } from "@/lib/datosEjemplo";
+import { estados, etiquetaEjemplo } from "@/lib/estados";
 
-const estilos = {
-  pendiente: { texto: "Pendiente", color: "bg-gray-100 text-gray-700" },
-  en_camino: { texto: "En camino", color: "bg-yellow-100 text-yellow-800" },
-  entregado: { texto: "Entregado", color: "bg-green-100 text-green-800" },
-  incidencia: { texto: "Incidencia", color: "bg-red-100 text-red-800" },
-};
+const botonSecundario =
+  "block rounded-lg border border-gray-300 py-2 text-center text-sm font-semibold hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800";
 
 function estadosIniciales(ruta) {
   return Object.fromEntries(
@@ -23,7 +20,7 @@ export default function ConductorPage() {
   const router = useRouter();
   const [nombre, setNombre] = useState("");
   const [ruta, setRuta] = useState(null);
-  const [estados, setEstados] = useState({});
+  const [estadoParadas, setEstadoParadas] = useState({});
   const [fotos, setFotos] = useState({});
   const [notas, setNotas] = useState({});
   const [reportando, setReportando] = useState(null);
@@ -36,18 +33,18 @@ export default function ConductorPage() {
 
     setNombre(nombreUsuario);
     setRuta(rutaDelConductor);
-    setEstados(estadosIniciales(rutaDelConductor));
+    setEstadoParadas(estadosIniciales(rutaDelConductor));
   }, []);
 
   if (!ruta) return null;
 
-  const terminada = (parada) => ["entregado", "incidencia"].includes(estados[parada.nombre]);
+  const terminada = (parada) => ["entregado", "incidencia"].includes(estadoParadas[parada.nombre]);
   const actual = ruta.paradas.find((p) => !terminada(p));
-  const entregadas = ruta.paradas.filter((p) => estados[p.nombre] === "entregado").length;
+  const entregadas = ruta.paradas.filter((p) => estadoParadas[p.nombre] === "entregado").length;
   const progreso = Math.round((ruta.paradas.filter(terminada).length / ruta.paradas.length) * 100);
 
   function cambiarEstado(parada, estado) {
-    setEstados((prev) => ({ ...prev, [parada]: estado }));
+    setEstadoParadas((prev) => ({ ...prev, [parada]: estado }));
   }
 
   function guardarFoto(parada, archivo) {
@@ -68,8 +65,8 @@ export default function ConductorPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
-      <header className="bg-green-700 px-5 pb-6 pt-5 text-white">
+    <div className="min-h-screen bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100">
+      <header className="bg-green-700 px-5 pb-6 pt-5 text-white dark:bg-green-800">
         <div className="mx-auto max-w-md">
           <div className="flex items-center justify-between">
             <p className="font-bold">EcoRoute</p>
@@ -96,24 +93,26 @@ export default function ConductorPage() {
       <main className="mx-auto max-w-md space-y-3 px-5 py-6">
         <div className="flex items-center justify-between">
           <h2 className="font-semibold">Paradas en orden</h2>
-          <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800">
-            Datos de ejemplo
-          </span>
+          <span className={etiquetaEjemplo}>Datos de ejemplo</span>
         </div>
 
         {ruta.paradas.map((parada, i) => {
-          const estado = estados[parada.nombre];
+          const estado = estadoParadas[parada.nombre];
           const esActual = actual?.nombre === parada.nombre;
 
           return (
             <div
               key={parada.nombre}
-              className={`rounded-xl border bg-white p-4 ${esActual ? "border-green-600 shadow-md" : "border-gray-200"}`}
+              className={`rounded-xl border bg-white p-4 dark:bg-gray-900 ${
+                esActual ? "border-green-600 shadow-md" : "border-gray-200 dark:border-gray-800"
+              }`}
             >
               <div className="flex items-start gap-3">
                 <span
                   className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
-                    esActual ? "bg-green-600 text-white" : "bg-gray-100 text-gray-600"
+                    esActual
+                      ? "bg-green-600 text-white"
+                      : "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400"
                   }`}
                 >
                   {i + 1}
@@ -121,11 +120,11 @@ export default function ConductorPage() {
                 <div className="flex-1">
                   <div className="flex items-start justify-between gap-2">
                     <p className="font-semibold">{parada.nombre}</p>
-                    <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${estilos[estado].color}`}>
-                      {estilos[estado].texto}
+                    <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${estados[estado].color}`}>
+                      {estados[estado].texto}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-500">{parada.direccion}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{parada.direccion}</p>
 
                   {fotos[parada.nombre] && (
                     <img
@@ -136,7 +135,9 @@ export default function ConductorPage() {
                   )}
 
                   {notas[parada.nombre] && (
-                    <p className="mt-2 rounded-lg bg-red-50 p-2 text-sm text-red-800">{notas[parada.nombre]}</p>
+                    <p className="mt-2 rounded-lg bg-red-50 p-2 text-sm text-red-800 dark:bg-red-900/40 dark:text-red-300">
+                      {notas[parada.nombre]}
+                    </p>
                   )}
                 </div>
               </div>
@@ -147,12 +148,12 @@ export default function ConductorPage() {
                     href={`https://www.google.com/maps/dir/?api=1&destination=${parada.lat},${parada.lng}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block rounded-lg border border-gray-300 py-2 text-center text-sm font-semibold hover:bg-gray-50"
+                    className={botonSecundario}
                   >
                     Cómo llegar
                   </a>
 
-                  <label className="block cursor-pointer rounded-lg border border-gray-300 py-2 text-center text-sm font-semibold hover:bg-gray-50">
+                  <label className={`${botonSecundario} cursor-pointer`}>
                     {fotos[parada.nombre] ? "Cambiar foto" : "Tomar foto de la entrega"}
                     <input
                       type="file"
@@ -176,13 +177,13 @@ export default function ConductorPage() {
                         value={nota}
                         onChange={(e) => setNota(e.target.value)}
                         placeholder="¿Qué pasó? Ej: el local estaba cerrado"
-                        className="w-full rounded-lg border border-gray-300 p-2 text-sm focus:border-red-500 focus:outline-none"
+                        className="w-full rounded-lg border border-gray-300 p-2 text-sm focus:border-red-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800"
                         rows={3}
                       />
                       <div className="flex gap-2">
                         <button
                           onClick={() => setReportando(null)}
-                          className="flex-1 rounded-lg border border-gray-300 py-2 text-sm"
+                          className="flex-1 rounded-lg border border-gray-300 py-2 text-sm dark:border-gray-700"
                         >
                           Cancelar
                         </button>
@@ -198,7 +199,7 @@ export default function ConductorPage() {
                   ) : (
                     <button
                       onClick={() => setReportando(parada.nombre)}
-                      className="w-full py-2 text-sm font-semibold text-red-600"
+                      className="w-full py-2 text-sm font-semibold text-red-600 dark:text-red-400"
                     >
                       Reportar incidencia
                     </button>
@@ -210,7 +211,7 @@ export default function ConductorPage() {
         })}
 
         {!actual && (
-          <div className="rounded-xl bg-green-50 p-4 text-center text-green-800">
+          <div className="rounded-xl bg-green-50 p-4 text-center text-green-800 dark:bg-green-900/40 dark:text-green-300">
             Terminaste todas las paradas de hoy.
           </div>
         )}

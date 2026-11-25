@@ -26,7 +26,7 @@ export default function RutaProtegida({ rol, children }) {
 
   if (!autorizado) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-gray-500">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 text-gray-500 dark:bg-gray-950 dark:text-gray-400">
         Verificando sesión...
       </div>
     );

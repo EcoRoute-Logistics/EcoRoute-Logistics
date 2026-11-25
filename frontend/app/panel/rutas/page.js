@@ -3,11 +3,12 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { bodega, rutasEjemplo } from "@/lib/rutasEjemplo";
+import { etiquetaEjemplo } from "@/lib/estados";
 
 const MapaRutas = dynamic(() => import("@/components/MapaRutas"), {
   ssr: false,
   loading: () => (
-    <div className="flex h-[350px] items-center justify-center rounded-xl bg-white text-gray-500 sm:h-[500px]">
+    <div className="flex h-[350px] items-center justify-center rounded-xl bg-white text-gray-500 dark:bg-gray-900 dark:text-gray-400 sm:h-[500px]">
       Cargando mapa...
     </div>
   ),
@@ -27,6 +28,13 @@ async function trazarRuta(ruta) {
     km: data.routes[0].distance / 1000,
   };
 }
+
+const tarjetaRuta = (activa) =>
+  `w-full rounded-xl border p-4 text-left ${
+    activa
+      ? "border-green-600 bg-green-50 dark:bg-green-950"
+      : "border-gray-200 bg-white hover:bg-gray-50 dark:border-gray-800 dark:bg-gray-900 dark:hover:bg-gray-800"
+  }`;
 
 export default function RutasPage() {
   const [seleccionada, setSeleccionada] = useState(null);
@@ -49,21 +57,14 @@ export default function RutasPage() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-2xl font-bold">Rutas de hoy</h1>
-        <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800">
-          Datos de ejemplo
-        </span>
+        <span className={etiquetaEjemplo}>Datos de ejemplo</span>
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
         <div className="space-y-3">
-          <button
-            onClick={() => setSeleccionada(null)}
-            className={`w-full rounded-xl border p-4 text-left ${
-              seleccionada === null ? "border-green-600 bg-green-50" : "border-gray-200 bg-white hover:bg-gray-50"
-            }`}
-          >
+          <button onClick={() => setSeleccionada(null)} className={tarjetaRuta(seleccionada === null)}>
             <p className="font-semibold">Todas las rutas</p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               {rutasEjemplo.length} rutas · {totalKm.toFixed(1)} km en total
             </p>
           </button>
@@ -72,18 +73,16 @@ export default function RutasPage() {
             <button
               key={ruta.id}
               onClick={() => setSeleccionada(ruta.id)}
-              className={`w-full rounded-xl border p-4 text-left ${
-                seleccionada === ruta.id ? "border-green-600 bg-green-50" : "border-gray-200 bg-white hover:bg-gray-50"
-              }`}
+              className={tarjetaRuta(seleccionada === ruta.id)}
             >
               <div className="flex items-center gap-2">
                 <span className="h-3 w-3 rounded-full" style={{ backgroundColor: ruta.color }} />
                 <p className="font-semibold">{ruta.conductor}</p>
               </div>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                 {ruta.vehiculo} · {ruta.paradas.length} paradas · {kmDe(ruta).toFixed(1)} km
               </p>
-              <ol className="mt-2 list-decimal pl-5 text-sm text-gray-700">
+              <ol className="mt-2 list-decimal pl-5 text-sm text-gray-700 dark:text-gray-300">
                 {ruta.paradas.map((p) => (
                   <li key={p.nombre}>{p.nombre}</li>
                 ))}
