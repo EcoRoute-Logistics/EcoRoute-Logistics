@@ -5,12 +5,14 @@ import archivosRouter from "./routes/archivos.js";
 import authRouter from "./routes/auth.js";
 import vehiculosRouter from "./routes/vehiculos.js";
 import conductoresRouter from "./routes/conductores.js";
+import pedidosRoutes from "./routes/pedidos.routes.js";
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 app.use("/api/vehiculos", vehiculosRouter);
 app.use("/api/conductores", conductoresRouter);
+app.use("/api", pedidosRoutes);
 
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
