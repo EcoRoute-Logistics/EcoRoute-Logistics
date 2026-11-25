@@ -69,7 +69,16 @@ export async function crearRutaController(req, res) {
       });
     }
 
-    const { nombre, origen, pedidos, capacidad_max_kg } = req.body ?? {};
+    const {
+      nombre,
+      origen,
+      pedidos,
+      capacidad_max_kg,
+      conductor_id = null,
+      vehiculo_id = null,
+      fecha,
+    } = req.body ?? {};
+
     if (!origen || typeof origen.lat !== "number" || typeof origen.lon !== "number") {
       return res.status(400).json({ ok: false, error: "Origen inválido." });
     }
@@ -90,16 +99,41 @@ export async function crearRutaController(req, res) {
       });
     }
 
+    const pedidosIdsOriginales = pedidos.map((item) =>
+      typeof item === "object" && item !== null ? item.pedido_id ?? item.id ?? null : item
+    );
+
+    const paradasConPedido = Array.isArray(optimizada.paradas)
+      ? optimizada.paradas.map((p, idx) => ({
+          ...p,
+          pedido_id:
+            p.pedido_id ??
+            p.id ??
+            pedidosIdsOriginales[idx] ??
+            null,
+        }))
+      : pedidosIdsOriginales.map((pedidoId, idx) => ({
+          pedido_id: pedidoId,
+          orden: idx + 1,
+        }));
+
     const creada = await crearRutaConParadas(pool, {
       nombre,
       origen,
+      conductor_id,
+      vehiculo_id,
+      fecha,
       ...optimizada,
+      paradas: paradasConPedido,
     });
 
     return res.status(201).json({ ok: true, data: creada });
   } catch (err) {
     console.error("Error al crear ruta en BD:", err);
-    return res.status(500).json({ ok: false, error: "Error interno al guardar la ruta." });
+    const status = Number.isInteger(err.statusCode) ? err.statusCode : 500;
+    const message =
+      status < 500 && err.message ? err.message : "Error interno al guardar la ruta.";
+    return res.status(status).json({ ok: false, error: message });
   }
 }
 
